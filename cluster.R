@@ -16,15 +16,23 @@ plot3d(x,y, z,  box = F,
 
 
 sdat <- data.frame(x,y,z)
-index <- sample(1:nrow(sdat), 2000,replace=F)
 
-cl <- hdbscan(sdat,minPts=5)
+sdat <- as.data.frame(scale(sdat))
+PCA1 = prcomp(sdat)
+
+pcdat <- data.frame(PCA1$x[,1],PCA1$x[,2],PCA1$x[,3])
 
 
-CLUST <- Mclust(sdat[index,],G = 5,initialization=list(size=1000),
+
+index <- sample(1:nrow(pcdat), 2000,replace=F)
+
+cl <- hdbscan(pcdat,minPts=5)
+
+
+CLUST <- Mclust(pcdat[index,],G = 5,initialization=list(size=1000),
                   modelName = "VVV")
 
-
+e
 library(plotly)
 plot_ly(x = x, y = y, z = z,color  = as.factor(cl$cluster),type = "scatter3d", mode = "markers") %>% 
   layout(scene = list(
