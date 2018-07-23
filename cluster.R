@@ -32,7 +32,7 @@ cl <- hdbscan(pcdat,minPts=5)
 CLUST <- Mclust(pcdat[index,],G = 5,initialization=list(size=1000),
                   modelName = "VVV")
 
-e
+
 library(plotly)
 plot_ly(x = x, y = y, z = z,color  = as.factor(cl$cluster),type = "scatter3d", mode = "markers") %>% 
   layout(scene = list(
