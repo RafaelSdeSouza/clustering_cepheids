@@ -2,6 +2,8 @@ require(mclust)
 require(dbscan)
 source("gg_ellipse.R")
 require(rgl)
+library(Rtsne)
+library(plotly)
 c_dat <- read.table("blg_met_rrl.dat",header = T)
 head(c_dat)
 
@@ -18,22 +20,21 @@ plot3d(x,y, z,  box = F,
 sdat <- data.frame(x,y,z)
 
 sdat <- as.data.frame(scale(sdat))
-PCA1 = prcomp(sdat)
 
-pcdat <- data.frame(PCA1$x[,1],PCA1$x[,2],PCA1$x[,3])
-
+index <- sample(1:nrow(sdat ), 5000,replace=F)
 
 
-index <- sample(1:nrow(pcdat), 2000,replace=F)
 
-cl <- hdbscan(pcdat,minPts=5)
+tsne <- Rtsne(sdat[index,], dims = 2, perplexity=50, verbose=TRUE, max_iter = 500)
+
+plot(tsne$Y)
 
 
-CLUST <- Mclust(pcdat[index,],G = 5,initialization=list(size=1000),
+CLUST <- Mclust(tsne$Y,G = 5,initialization=list(size=1000),
                   modelName = "VVV")
 
+plot(CLUST)
 
-library(plotly)
 plot_ly(x = x, y = y, z = z,color  = as.factor(cl$cluster),type = "scatter3d", mode = "markers") %>% 
   layout(scene = list(
     xaxis = list(title = "Log(P)"), 
