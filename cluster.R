@@ -25,7 +25,7 @@ index <- sample(1:nrow(sdat ), 5000,replace=F)
 
 
 
-tsne <- Rtsne(sdat[index,], dims = 2, perplexity=50, verbose=TRUE, max_iter = 500)
+tsne <- Rtsne(sdat[index,], dims = 2, perplexity=50, verbose=TRUE, max_iter = 10000)
 
 plot(tsne$Y)
 
